@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TCP Calculator</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 30px auto;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            font-size: 16px;
+            color: #333;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color:#0056b3;
+        }
+
+        #result {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            color: #2c3e50;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            form {
+                padding: 15px;
+                max-width: 100%;
+            }
+        }
+    </style>
+    <script>
+        async function calculate() {
+            const n1 = document.getElementById("n1").value;
+            const n2 = document.getElementById("n2").value;
+            const operator = document.getElementById("operator").value;
+
+            const response = await fetch('/calculate', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ n1: parseInt(n1), n2: parseInt(n2), operator }),
+            });
+
+            const data = await response.json();
+            document.getElementById("result").innerText = "Result: " + data.result;
+        }
+    </script>
+</head>
+<body>
+    <h1>TCP Calculator</h1>
+    <form onsubmit="event.preventDefault(); calculate();">
+        <label for="n1">Number 1:</label>
+        <input type="number" id="n1" required>
+        
+        <label for="n2">Number 2:</label>
+        <input type="number" id="n2" required>
+        
+        <label for="operator">Operator:</label>
+        <select id="operator">
+            <option value="+">+</option>
+            <option value="-">-</option>
+            <option value="*">*</option>
+            <option value="/">/</option>
+            <option value="%">%</option>
+        </select>
+        
+        <button type="submit">Calculate</button>
+    </form>
+    
+    <p id="result"></p>
+</body>
+</html>
